@@ -22,12 +22,3 @@
     <button class="button button-secondary" (click)="modalRef.close()">Cancel</button>
   </div>
 </ng-template>
-
-<ng-template #template1>
-  <p>I am template One!</p>
-</ng-template>
-<ng-template #template2>
-  <p>I am template Two!</p>
-</ng-template>
-
-<ng-content *ngTemplateOutlet="selectedTemplate"></ng-content>
