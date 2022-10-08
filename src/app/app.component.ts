@@ -21,6 +21,6 @@ export class AppComponent {
     this.modalRef = this.modalService.open({
       templateRef: this.modalTemplateRef,
       title: 'User Details'
-    })
+    });
   }
 }
