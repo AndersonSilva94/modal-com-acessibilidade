@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[appFocusTrap]'
@@ -22,11 +22,26 @@ export class FocusTrapDirective implements AfterViewInit {
         textarea:not([disabled]),
         input:not([disabled]),
         select:not([disabled])`
-      )
+      ) as Array<HTMLElement>;
 
     this.firstFocusableElement = focusableElement[0];
-    this.lastFocusableElement = focusableElement[focusableElement - 1]
+    this.lastFocusableElement = focusableElement[focusableElement.length - 1]
     this.firstFocusableElement.focus();
+  }
+
+  @HostListener('keydown', ['$event'])
+  public manageTab(event: KeyboardEvent): void {
+    if(event.key !== 'Tab') {
+      return;
+    }
+
+    if(event.shiftKey && document.activeElement === this.firstFocusableElement) {
+      this.lastFocusableElement.focus();
+      event.preventDefault();
+    } else if (document.activeElement === this.lastFocusableElement) {
+      this.firstFocusableElement.focus();
+      event.preventDefault();
+    }
   }
 
 }
