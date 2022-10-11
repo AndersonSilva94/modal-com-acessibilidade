@@ -1,4 +1,5 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalRef } from './shared/components/modal/models/model-ref';
 import { ModalService } from './shared/components/modal/services/modal.service';
 
@@ -7,22 +8,42 @@ import { ModalService } from './shared/components/modal/services/modal.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   @ViewChild('modal') public modalTemplateRef: TemplateRef<any>;
 
   title = 'a11y-p2';
   public firstName = 'Anderson';
   public modalRef: ModalRef;
   public info = false;
+  public form: FormGroup;
 
   constructor(
-    private modalService: ModalService
+    private modalService: ModalService,
+    private fb: FormBuilder
   ) {}
+
+  ngOnInit(): void {
+    this.createForm();
+  }
 
   public show(): void {
     this.modalRef = this.modalService.open({
       templateRef: this.modalTemplateRef,
       title: 'User Details'
     });
+  }
+
+  public createForm() {
+    this.form = this.fb.group({
+      firstName: ['Andy', Validators.required],
+      surname: ['', Validators.required],
+      age: ['', Validators.required],
+      info: [false]
+    })
+  }
+
+  public submit(): void {
+    console.log(this.form.value)
+    this.modalRef.close()
   }
 }
